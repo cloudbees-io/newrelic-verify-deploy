@@ -1,0 +1,45 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: action
+name: newrelic build actions
+inputs:
+  controller-url:  # id of input
+    description: 'controller url'
+    required: false
+    default: 'https://api.newrelic.com/v2'
+  infra-condition-url:  # id of input
+    description: 'infra  conditions url'
+    required: false
+    default: 'https://infra-api.newrelic.com/v2'
+  api-key:  # id of input
+    description: 'Api key'
+    required: true
+  duration:  # id of input
+    description: 'Duration in millisecs'
+    required: true
+  policies:  # id of input
+    description: 'conditions as string array'
+    required: true
+  conditions:  # id of input
+    description: 'conditions as string array'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: invoke-newrelic-job
+      name: invoke-newrelic-job
+      uses: docker://registry.saas-dev.beescloud.com/staging/newrelic-actions:main-5699c361d4cbcbe5a22b4a84000f14a8874cfb39
+      shell: sh
+      env:
+        RUN_ID: ${{ cloudbees.run_id }}
+        JOB_ID: ${{ job.id }}
+        STEP_ID: ${{ step.internal.id }}
+        DNS_URL: ${{ cloudbees.api.url }}
+        JWT_TOKEN: ${{ cloudbees.api.token }}
+      run: |
+        set -x
+        cd /app
+        ./newrelic_actions_app invoke -v '{"metaInfo":{"controllerUrl":"${{ inputs.controller-url }}","infraConditonsUrl":"${{ inputs.infra-condition-url }}","apiKey":"${{ inputs.api-key }}","toolType":"NEWRELICACTIONS","duration":${{ inputs.duration }},"policies":${{ inputs.policies }},"conditions":${{ inputs.conditions }}}}'
+        
+        
+        
