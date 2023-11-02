@@ -54,7 +54,7 @@ In your YAML file, add:
     verify-with-newrelic:
       steps:
       - name: Verify post-deploy with New Relic
-        uses: cloudbees.io/newrelic-verify-deploy@v1
+        uses: cloudbees-io/newrelic-verify-deploy@v1
         with:
           api-key: ${{ secrets.NEWRELIC_API_KEY }}
           duration: '10000'
