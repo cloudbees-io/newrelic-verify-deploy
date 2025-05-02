@@ -28,7 +28,7 @@ runs:
   steps:
     - id: invoke-newrelic-job
       name: invoke-newrelic-job
-      uses: docker://public.ecr.aws/l7o7z1g8/actions/newrelic-actions:main-15f7cb9640d97fd7749eba892ff7f37ac2eec42a
+      uses: docker://public.ecr.aws/l7o7z1g8/actions/newrelic-actions:main-7d92628539cde3f26df49206090ad738da492e0c
       shell: sh
       env:
         RUN_ID: ${{ cloudbees.run_id }}
